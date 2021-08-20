@@ -1,0 +1,25 @@
+.timer {
+  width: 80%;
+  height: 80px;
+  margin: auto;
+  // border: 2px solid lightgreen;
+  display: flex;
+  justify-content: center;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 65px;
+  font-size: 20px;
+  // border: 2px solid lightpink;
+}
+.value {
+  text-align: center;
+  font-size: 35px;
+}
+.label {
+  text-align: center;
+  font-size: 15px;
+}
