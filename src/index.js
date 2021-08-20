@@ -1,12 +1,9 @@
 import { alert, defaultModules } from '@pnotify/core';
 import * as PNotifyMobile from '@pnotify/mobile';
+import templateFunction from './template/templateList.hbs';
 var _ = require('lodash');
 
-defaultModules.set(PNotifyMobile, {});
 
-alert({
-  text: 'Notice me, senpai!'
-});
 
 const input = document.querySelector('.countriesName');
 const list = document.querySelector('.list');
@@ -29,17 +26,38 @@ const onCountriesSearch = _.debounce(() => {
    fetch(`https://restcountries.eu/rest/v2/name/${name}`)
     .then(response => {
     
-      console.log('response :>> ', response);
+      // console.log('response :>> ', response);
       return response.json();
     })
      .then(data => {
        const items = data.reduce((acc, item) => {
-         acc += `<li class="item">${item}</li>`;
+         acc += `<li class="item">${item.name}</li>`;
          return acc;
-      })
-        
-       list.innerHTML = items;
-        console.log('data :>> ', items);
+      }, '')
+          // console.log(data);
+      
+       if (data.length === 1) {
+         list.innerHTML = templateFunction(data[0]);
+          // console.log(data);
+
+         
+       }
+       else if (data.length > 1) {
+         list.innerHTML = items;
+        // console.log('data :>> ', data);
+
+       }
+       else if (data.length > 10) {
+          defaultModules.set(PNotifyMobile, {});
+
+         alert({
+          text: 'Notice me, senpai!'
+        });
+
+       }
+      
+       
+
       // data handling
     })
     .catch(error => {
@@ -49,7 +67,6 @@ const onCountriesSearch = _.debounce(() => {
   
   
   }, 500)
-    // console.log(name);
 
 
  
