@@ -1,49 +1,62 @@
-import './sass/main.scss';
+import { alert, defaultModules } from '@pnotify/core';
+import * as PNotifyMobile from '@pnotify/mobile';
+var _ = require('lodash');
 
-const refs = {
-  daysField: document.querySelector('[data-value="days"]'),
-  hoursField: document.querySelector('[data-value="hours"]'),
-  minsField: document.querySelector('[data-value="mins"]'),
-  secsField: document.querySelector('[data-value="secs"]'),
-};
+defaultModules.set(PNotifyMobile, {});
 
-class CountdownTimer {
-  constructor({ onTick, targetDate }) {
-    this.onTick = onTick;
-    this.targetDate = Date.now(targetDate);
-    this.intervalId = setInterval(() => {
-      const currentTime = Date.now();
-      const deltaTime = targetDate - currentTime;
-      const time = this.getTimeComponents(deltaTime);
-      updateClockface(time);
-      this.onTick = time;
-    }, 1000);
-  }
-
-  getTimeComponents(time) {
-    const days = Math.floor(time / (1000 * 60 * 60 * 24));
-    const hours = this.pad(Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
-    const mins = this.pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
-    const secs = this.pad(Math.floor((time % (1000 * 60)) / 1000));
-    return { days, hours, mins, secs };
-  }
-
-  pad(value) {
-    return String(value).padStart(2, '0');
-  }
-}
-
-function updateClockface({ days, hours, mins, secs }) {
-  refs.daysField.textContent = `${days} :`;
-  refs.hoursField.textContent = `${hours} :`;
-  refs.minsField.textContent = `${mins} :`;
-  refs.secsField.textContent = `${secs}`;
-}
-
-const countdownTimer = new CountdownTimer({
-  selector: '#timer-1',
-  targetDate: new Date('Aug 31, 2021'),
-  onTick: updateClockface,
+alert({
+  text: 'Notice me, senpai!'
 });
 
+const input = document.querySelector('.countriesName');
+const list = document.querySelector('.list');
 
+// const onCountriesSearch = _.debounce(() => {
+//   let name = input.value;
+
+//   list.innerHTML = `<li class="item">${name}</li>`;
+//     console.log(name);
+//   }, 500)
+
+
+
+const onCountriesSearch = _.debounce(() => {
+  let name = '';
+    name = input.value;
+  // list.innerHTML = `<li class="item">${name}</li>`;
+    // console.log(name);
+  
+   fetch(`https://restcountries.eu/rest/v2/name/${name}`)
+    .then(response => {
+    
+      console.log('response :>> ', response);
+      return response.json();
+    })
+     .then(data => {
+       const items = data.reduce((acc, item) => {
+         acc += `<li class="item">${item}</li>`;
+         return acc;
+      })
+        
+       list.innerHTML = items;
+        console.log('data :>> ', items);
+      // data handling
+    })
+    .catch(error => {
+      // error handling
+      console.log('error+ :>> ', error+', бл...');
+    });
+  
+  
+  }, 500)
+    // console.log(name);
+
+
+ 
+
+  
+
+
+
+
+input.addEventListener('input', onCountriesSearch)
