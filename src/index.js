@@ -1,32 +1,30 @@
-import { alert, defaultModules } from '@pnotify/core';
-import * as PNotifyMobile from '@pnotify/mobile';
+import './sass/main.scss';
+import '@pnotify/core/dist/BrightTheme.css';
+import { error } from '@pnotify/core';
+import { defaults } from '@pnotify/core';
 import templateFunction from './template/templateList.hbs';
-var _ = require('lodash');
 
+defaults.mode='light'
+defaults.animateSpeed = '100ms';
+defaults.hide = true;
+defaults.delay = 300;
+defaults.closer = false;
+defaults.sticker = false;
+
+const _ = require('lodash');
 
 
 const input = document.querySelector('.countriesName');
 const list = document.querySelector('.list');
 
-// const onCountriesSearch = _.debounce(() => {
-//   let name = input.value;
-
-//   list.innerHTML = `<li class="item">${name}</li>`;
-//     console.log(name);
-//   }, 500)
-
-
 
 const onCountriesSearch = _.debounce(() => {
   let name = '';
     name = input.value;
-  // list.innerHTML = `<li class="item">${name}</li>`;
-    // console.log(name);
   
    fetch(`https://restcountries.eu/rest/v2/name/${name}`)
     .then(response => {
-    
-      // console.log('response :>> ', response);
+
       return response.json();
     })
      .then(data => {
@@ -34,37 +32,26 @@ const onCountriesSearch = _.debounce(() => {
          acc += `<li class="item">${item.name}</li>`;
          return acc;
       }, '')
-          // console.log(data);
-      
+
        if (data.length === 1) {
          list.innerHTML = templateFunction(data[0]);
-          // console.log(data);
 
-         
        }
-       else if (data.length > 1) {
+       else if (data.length > 1 &&data.length<=10) {
          list.innerHTML = items;
-        // console.log('data :>> ', data);
-
        }
        else if (data.length > 10) {
-          defaultModules.set(PNotifyMobile, {});
-
-         alert({
-          text: 'Notice me, senpai!'
-        });
+        //  error('Too many matcheses found. Please enter a more specific query!');
+         error({
+           text: 'Too many matcheses found. Please enter a more specific query!',
+         });
 
        }
       
-       
-
-      // data handling
     })
     .catch(error => {
-      // error handling
       console.log('error+ :>> ', error+', бл...');
     });
-  
   
   }, 500)
 
