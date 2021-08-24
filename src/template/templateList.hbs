@@ -1,17 +1,17 @@
-
-<li class="country-item">
-    <article class="item">
-        <h2 class="country-name">{{name}}</h2>
-        <img src={{flag}} alt="Картофель, запеченный в мундире" class="flag" width="300"/>
-        <div class="card__content">
-            <p class="capital">Capital: {{capital}}</p>
-            <p class="population">Population: {{population}}</p>
-            <ul class="languages">
-                {{#each languages}}
-                <li class="language">Languages: {{name}}</li>
-                {{/each}}
-
-            </ul>
-        </div>
-    </article>
-</li>
+<ul class="list">
+    <h2 class="country-name">{{name}}</h2>
+    <div class="country-card">
+            <div class="card__content">
+                <li class="country-parameter capital"><span>Capital:</span>  {{capital}}</li>
+                <li class="country-parameter population"><span>Population:</span>  {{population}}</li>
+                <li class="country-parameter languages-list"><span>Languages:</span> 
+                    <ul class="languages">
+                        {{#each languages}}
+                        <li class="language"> {{name}}</li>
+                        {{/each}}
+                    </ul>
+                </li>
+            </div>
+            <img src={{flag}} alt="Картофель, запеченный в мундире" class="flag" width="300"/>
+    </div>
+</ul>
