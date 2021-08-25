@@ -40,6 +40,9 @@ const createMarkup = function (data) {
 
 const onCountriesSearch = _.debounce(() => {
   let name = '';
+  if (!input.value || input.value === ' ') {
+    return
+  }
   name = input.value;
   
   fetch(`https://restcountries.eu/rest/v2/name/${name}`)
